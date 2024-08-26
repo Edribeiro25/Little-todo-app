@@ -1,0 +1,2 @@
+GRANT ALL PRIVILEGES ON test.* TO 'user'@'%';
+FLUSH PRIVILEGES;
