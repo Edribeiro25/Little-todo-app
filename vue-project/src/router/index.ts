@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '../views/MainPage.vue'
-import LogginView from '../views/Login.vue'
+import LogginView from '../views/LoginPage.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory("http://localhost:8080"),
   routes: [
     {
       path: '/',

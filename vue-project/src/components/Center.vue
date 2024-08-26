@@ -6,13 +6,10 @@
 
 <script>
 export default {
-    name: 'Center',
+    name: 'CenterPage',
     // Your component options go here
 }
 </script>
 
 <style scoped>
-.center {
-    /* Your component styles go here */
-}
 </style>

@@ -1,66 +1,116 @@
 const prisma = require('./prismaClient');
 const bcrypt = require('bcryptjs');
 
+// User functions
+
 const createUser = async (userData) => {
-    const { email, password, name } = userData;
+    const { email, password, name , surname, } = userData;
+    console.log("Create", userData);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     return await prisma.user.create({
         data: {
-            email,
+            email : email,
+            name : name,
             password: hashedPassword,
-            name,
+            surname : surname,
         },
     });
 };
 
 const loginUser = async (userData) => {
     const { email, password} = userData;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    return await prisma.user.findUnique({
-        data: {
+    const user = await prisma.user.findUnique({
+        where: {
             email,
-            password: hashedPassword,
         },
     });
+    if (!user) {
+        throw new Error('User not found');
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new Error('Invalid password');
+    }
+    return user;
 };
 
-const createList = async (Data) => {
-    const { name } = Data;
+
+// List functions
+
+const createList = async (listData) => {
+    const { name, userId } = listData;
     return await prisma.list.create({
         data: {
-            
+            title: name,
+            authorId: userId,
         },
     });
 };
+
+const updateList = async (data) => {
+    const { name , id} = data;
+    return await prisma.list.update({
+        where: {
+            id : id,
+        },
+        data: {
+            name : name,
+        },
+    });
+};
+
+const getList = async (Data) => {
+    const { id } = Data;
+    const find = await prisma.list.findMany({
+        where: {
+            authorID : id,
+        },
+    });
+    return find;
+};
+
+const deleteList = async (ListId) => {
+    return await prisma.list.delete({
+        where: { id: ListId },
+    });
+};
+
+// Task functions
 
 const createTask = async (Data) => {
-    const { email, password, name } = Data;
-    return await prisma.list.create({
+    const { title, listId } = Data;
+    return await prisma.task.create({
         data: {
+            title,
+            listId,
         },
     });
 };
 
-const deleteList = async (userId) => {
-    return await prisma.list.delete({
-        where: { id: userId },
+const getTask = async (Data) => {
+    const { id } = Data;
+    return await prisma.task.findUniqueOrThrow({
+        where: {
+            id : id,
+        },
     });
 };
 
-
-const deleteTask = async (userId) => {
+const deleteTask = async (taskId) => {
     return await prisma.task.delete({
-        where: { id: userId },
+        where: { id: taskId },
     });
 };
 
 module.exports = {
     createUser,
-    createList,
-    createTask,
-    deleteList,
-    deleteTask,
     loginUser,
+    createList,
+    updateList,
+    getList,
+    deleteList,
+    createTask,
+    getTask,
+    deleteTask,
 };

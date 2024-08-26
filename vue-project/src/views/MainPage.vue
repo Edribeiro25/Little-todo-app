@@ -1,10 +1,10 @@
 <template>
     <div class="main-page">
         <div class="left">
-            <Left :lists="lists" @listSelected="handleListSelected" />
+            <Left @value-emitted="handleValueEmitted" />
         </div>
         <div class="center">
-            <Center :selectedList="selectedList" @taskSelected="handleTaskSelected" />
+            <CenterPage :selectedList="selectedList" @task-selected="handleTaskSelected" />
         </div>
         <div class="right">
             <Right :selectedTask="selectedTask" />
@@ -13,32 +13,27 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import Left from "@/components/Left.vue";
-import Center from "@/components/Center.vue";
+import CenterPage from "@/components/Center.vue";
 import Right from "@/components/Right.vue";
 
 export default {
     name: "MainPage",
     components: {
         Left,
-        Center,
+        CenterPage,
         Right,
     },
-    data() {
-        return {
-            lists: [], // Liste des tâches
-            selectedList: null, // Liste sélectionnée
-            selectedTask: null, // Tâche sélectionnée
+    setup() {
+        const handleValueEmitted = (value) => {
+            console.log('Value emitted from Left:', value);
+            // Handle the emitted value here
         };
-    },
-    methods: {
-        handleListSelected(list) {
-            this.selectedList = list;
-            this.selectedTask = null; // Réinitialiser la tâche sélectionnée
-        },
-        handleTaskSelected(task) {
-            this.selectedTask = task;
-        },
+
+        return {
+            handleValueEmitted,
+        };
     },
 };
 </script>
@@ -46,18 +41,22 @@ export default {
 <style scoped>
 .main-page {
     display: flex;
-    justify-content: space-between;
+}
+
+.left, .center, .right {
+    flex: 1;
+    padding: 10px;
 }
 
 .left {
-    flex: 1;
+    background-color: #f0f0f0;
 }
 
 .center {
-    flex: 2;
+    background-color: #ffffff;
 }
 
 .right {
-    flex: 1;
+    background-color: #f0f0f0;
 }
 </style>
