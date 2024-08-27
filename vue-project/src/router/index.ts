@@ -3,7 +3,7 @@ import MainPage from '../views/MainPage.vue'
 import LogginView from '../views/LoginPage.vue'
 
 const router = createRouter({
-  history: createWebHistory("http://localhost:8080"),
+  history: createWebHistory(""),
   routes: [
     {
       path: '/',

@@ -1,4 +1,12 @@
 <template>
+   <nav class="navbar">
+        <div class="navbar-brand">
+            Mon Site
+        </div>
+        <div class="navbar-end">
+            <button @click="$emit('logout')">Déconnexion</button>
+        </div>
+    </nav>
     <div class="main-page">
         <div class="left">
             <Left @value-emitted="handleValueEmitted" />
@@ -39,6 +47,13 @@ export default {
 </script>
 
 <style scoped>
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 1rem;
+}
 .main-page {
     display: flex;
 }

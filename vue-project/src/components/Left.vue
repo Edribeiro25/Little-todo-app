@@ -1,113 +1,66 @@
-```vue
+
 <template>
-    <div id="List">
+    <div id="app">
+      <nav class="navbar">
         <button class="toggle-button" @click="toggleSidebar">
-            {{ sidebarVisible ? '<<<' : '>>>' }}
+          {{ sidebarVisible ? '<<<' : '>>>' }}
         </button>
         <div class="sidebar" :class="{ hidden: !sidebarVisible }">
-            <button class="add-button" @click="showModal">Ajouter un élément</button>
-            <ul>
-                <li v-for="element in elements" :key="element.id" @click="handleClick(element)">
-                    <span class="element-name">{{ element.title }}</span>
-                    <button @click.stop="handleButtonClick(element)">X</button>
-                </li>
-            </ul>
+        <div class="add-item">
+            <button @click="addItem">Ajouter</button>
+            <input type="text" v-model="newItem" placeholder="Ajouter une List" />
         </div>
+        <ul>
+          <li v-for="item in items" :key="item.id">
+            <span class="item-name" @click="handleClick(item)">{{ item.title }}</span>
+            <button class="delete-button" @click="handleDelete(item)">X</button>
+          </li>
+        </ul>
         <Modal v-if="isModalVisible" @close="hideModal">
-            <form @submit.prevent="submitForm">
-                <label for="name">Name:</label>
-                <input type="text" v-model="newElementName" required />
-                <button type="submit">Add Element</button>
-            </form>
+          <form @submit.prevent="addItem">
+            <label for="name">Nom:</label>
+            <input type="text" id="name" v-model="newItem" />
+            <button type="submit">Ajouter</button>
+          </form>
         </Modal>
+      </div>
+      </nav>
     </div>
-</template>
-
-<script>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
-
-
-import { defineEmits } from 'vue';
-
-// Définir l'émission de l'événement
-const emit = defineEmits();
-
-function handleClick(element){
-    console.log('Clicked element:', element);
-    emit('value-emitted', 'wdwad');
-};
-
-export default {
-    name: 'LeftComponent',
-
-    setup() {
-        const elements = ref([]);
-        const sidebarVisible = ref(true);
-        const isModalVisible = ref(false);
-        const newElementName = ref('');
-
-        const toggleSidebar = () => {
-            sidebarVisible.value = !sidebarVisible.value;
-        };
-
-        
-
-        const handleButtonClick = async (element) => {
-            try {
-                const response = await axios.delete('http://localhost:3000/api/deletelist', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                console.log('Suppression réussie:', response.data);
-            } catch (error) {
-                console.error('Erreur de suppression:', error.message);
-            }
-            console.log('Clicked button for element:', element);
-        };
-
-        const submitForm = async () => {
-            try {
-                const response = await axios.post('http://localhost:3000/api/createlist', {
-                    name: newElementName.value,
-                    userId: 1 // Remplacez par l'ID utilisateur approprié
-                });
-                elements.value.push(response.data);
-                newElementName.value = '';
-                hideModal();
-            } catch (error) {
-                console.error('Erreur lors de l\'ajout de l\'élément:', error.message);
-            }
-        };
-
-        const fetchElements = async () => {
-            console.log('Fetching elements...');
-            try {
-                const response = await axios.get('http://localhost:3000/api/list/1'); // Remplacez par l'ID utilisateur approprié
-                elements.value = response.data;
-            } catch (error) {
-                console.error('Erreur de récupération des éléments:', error.message);
-            }
-        };
-
-        onMounted(() => {
-            fetchElements();
-        });
-
-        return {
-            elements,
-            sidebarVisible,
-            isModalVisible,
-            newElementName,
-            toggleSidebar,
-            handleClick,
-            handleButtonClick,
-            submitForm
-        };
+  </template>
+  
+  <script setup>
+  import { ref } from 'vue';
+  
+  const items = ref([{ title : 'Item 1' },{ title : 'Item 2' },{ title: 'Item 3' }]);
+  const sidebarVisible = ref(true);
+  const isModalVisible = ref(false);
+  const newItem = ref('');
+  
+  const toggleSidebar = () => {
+    sidebarVisible.value = !sidebarVisible.value;
+  };
+  
+  const handleClick = (item) => {
+    console.log('Clicked item:', item);
+    // Implement your logic here, e.g., navigate to a detail page
+  };
+  
+  const handleDelete = (item) => {
+    items.value = items.value.filter(i => i !== item);
+  };
+  
+  const addItem = () => {
+    if (newItem.value.trim() !== '') {
+      items.value.push({ id: Date.now(), title: newItem.value });
+      newItem.value = '';
+      hideModal();
     }
-};
-</script>
+  };
+  
+  const hideModal = () => {
+    isModalVisible.value = false;
+  };
+  </script>
 
 <style>
 /* Ajoutez ces styles pour gérer le dépassement de texte */
@@ -129,10 +82,15 @@ export default {
     justify-content: center;
 }
 
+.add-item {
+    display: flex;
+    direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .toggle-button {
-    position: fixed;
-    top: 10px;
-    left: 10px;
     background-color: #20d70b;
     color: white;
     border: none;
@@ -147,11 +105,6 @@ export default {
 }
 
 .sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 15vw;
-    height: 100vh;
     background-color: #f8f9fa;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
@@ -159,7 +112,7 @@ export default {
 }
 
 .sidebar.hidden {
-    transform: translateX(-100%);
+    transform: translateX(-120%);
 }
 
 .add-button {
