@@ -20,7 +20,6 @@ model User {
   name      String
   password  String
   surname   String
-  token     String?
   posts     List[]
 }
 
@@ -41,7 +40,7 @@ model Task{
   dateLimit     DateTime 
   done          Boolean  @default(false)
   title         String
-  desciption    String
-  list          List    @relation(fields: [listId], references: [id])
+  desciption    String?
+  list          List    @relation(fields: [listId], references: [id], onDelete: Cascade)
   listId        Int
 }

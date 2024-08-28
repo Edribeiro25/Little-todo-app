@@ -24,12 +24,14 @@
   import {onMounted, ref } from 'vue';
   import axios from 'axios';
   import VueCookies from 'vue-cookies';
-  
- 
+  import { defineEmits } from 'vue';
+
+  const emit = defineEmits(['centerID']);
   const id = ref();
   const items = ref([]);
   const sidebarVisible = ref(true);
   const newItem = ref('');
+
 
   onMounted(() => {
     fetchList();
@@ -51,15 +53,14 @@
       }})
     .then(res => { items.value = res.data;})
     .catch(err => {console.log(err)})
-    console.log(items.value)
-}
+  }
   
   const toggleSidebar = () => {
     sidebarVisible.value = !sidebarVisible.value;
   };
   
   const handleClick = (item) => {
-    console.log('Clicked item:', item);
+    emit('centerID', item.id);
   };
   
 async function handleDelete(item){
@@ -71,7 +72,7 @@ async function handleDelete(item){
       headers: {
         Authorization: `Bearer ${VueCookies.get('access_token')}`
       }})
-    .then(fetchList())
+    .then(res => { console.log(res.data); items.value = items.value.filter(item => item.id !== delid);})
     .catch(err => {console.log(err)})
   };
   

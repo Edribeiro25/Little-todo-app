@@ -9,13 +9,13 @@
     </nav>
     <div class="main-page">
       <div class="left">
-        <Left />
+        <Left @centerID="centerPage"/>
       </div>
       <div class="center">
-        <CenterPage  />
+        <CenterPage ref="center" @rightID="rightPage"/>
       </div>
       <div class="right">
-        <Right />
+        <Right ref="right" />
       </div>
     </div>
   </template>
@@ -27,11 +27,18 @@
   import VueCookies from 'vue-cookies';
   import router from '../router';
   import store from '../store';
+  import { ref } from 'vue';
 
   const center = ref();
+  const right = ref();
   
-  function centerPage(id){
-    center.value.fetchList(id);
+  function centerPage(idlist){
+    center.value.fetchList(idlist);
+  }
+
+  function rightPage(idtask){
+    console.log('Right page:', idtask);
+    right.value.fetchTask(idtask);
   }
 
   const logout = () => {

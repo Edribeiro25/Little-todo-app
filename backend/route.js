@@ -57,15 +57,6 @@ router.post('/addlist',verifyToken,async (req, res) => {
     }
 });
 
-router.patch('/list',verifyToken , async (req, res) => {
-    try {
-        const user = await Service.updateList(req.body);
-        res.status(201).json(user);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-});
-
 router.get('/list/:id',verifyToken , async (req, res) => {
     try {
         const list = await Service.getList(req.params.id);
@@ -75,20 +66,32 @@ router.get('/list/:id',verifyToken , async (req, res) => {
     }
 });
 
+router.get('/list1/:id',verifyToken , async (req, res) => {
+    try {
+        const list = await Service.getListid(req.params.id);
+        res.status(201).json(list);
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ error: error.message });
+    }
+});
+
 router.delete('/deletelist/:id', async (req, res) => {
     try {
         const user = await Service.deleteList(req.params.id);
         res.status(201).json(user);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: error });
     }
 });
 
 router.post('/createTask',verifyToken , async (req, res) => {
     try {
-        const user = await Service.createTask(req.body);
+        const user = await Service.createTask(req.body.body);
         res.status(201).json(user);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -98,6 +101,7 @@ router.get('/task/:id',verifyToken , async (req, res) => {
         const user = await Service.getTask(req.params.id);
         res.status(201).json(user);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -107,6 +111,16 @@ router.delete('/task:id',verifyToken ,async (req, res) => {
         const user = await Service.deleteTask(req.params.id);
         res.status(201).json(user);
     } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+router.patch('/task',verifyToken , async (req, res) => {
+    try {
+        const user = await Service.updateTask(req.body);
+        res.status(201).json(user);
+    } catch (error) {
+        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });

@@ -68,6 +68,19 @@ const getList = async (Data) => {
     return find;
 };
 
+const getListid = async (Data) => {
+    const find = await prisma.list.findUniqueOrThrow({
+        where: {
+            id : Number(Data),
+        },
+        include: {
+            task: true,
+        },
+    });
+    return find;
+};
+
+
 const deleteList = async (id) => {
     console.log(id);
     return await prisma.list.delete({
@@ -78,22 +91,40 @@ const deleteList = async (id) => {
 // Task functions
 
 const createTask = async (Data) => {
-    const { title, listId } = Data;
+    const date = new Date(Data.dateLimit);
     return await prisma.task.create({
-        data: {
-            title,
-            listId,
-        },
+    data: {
+        title: Data.title,
+        desciption: Data.description,
+        dateLimit : date,
+        done : Data.done,
+        listId : Data.listId,
+    },
     });
 };
 
 const getTask = async (Data) => {
-    const { id } = Data;
+    console.log(Data);
     return await prisma.task.findUniqueOrThrow({
         where: {
-            id : id,
+            id : Number(Data),
         },
     });
+};
+
+const updateTask = async (Data) => {
+    const update = await prisma.task.update({
+     where: {
+            id : Number(Data.body.id),
+    },
+    data: {
+        title : Data.body.title,
+        done : Data.body.done,
+        desciption : Data.body.description,
+        dateLimit : Data.body.dateLimit,
+    },
+    });
+    return update;
 };
 
 const deleteTask = async (taskId) => {
@@ -113,4 +144,6 @@ module.exports = {
     createTask,
     getTask,
     deleteTask,
+    getListid,
+    updateTask,
 };
