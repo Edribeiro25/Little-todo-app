@@ -70,8 +70,8 @@ export default {
                         'Content-Type': 'application/json'
                     }
                 });
-                router.push('/home');
-                console.log('Connexion réussie:', response.data);
+                this.$cookies.set('access_token', response.data.token , { expires: '7d' });
+                this.router.push("/home");
             } catch (error) {
                 console.error('Erreur de connexion:', error.message);
                 this.errorMessage = 'Échec de la connexion. Veuillez vérifier vos informations.';
@@ -93,7 +93,8 @@ export default {
                         'Content-Type': 'application/json'
                     }
                 });
-                console.log('Inscription réussie:', response.data);
+                this.$cookies.set('access_token', response.data.token , { expires: '7d' });
+                this.router.push("/home");
             } catch (error) {
                 console.error('Erreur d\'inscription:', error.message);
                 this.errorMessage = 'Échec de l\'inscription. Veuillez vérifier vos informations.';

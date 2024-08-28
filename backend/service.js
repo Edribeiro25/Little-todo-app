@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 
 const createUser = async (userData) => {
     const { email, password, name , surname, } = userData;
-    console.log("Create", userData);
     const hashedPassword = await bcrypt.hash(password, 10);
 
     return await prisma.user.create({
@@ -38,21 +37,21 @@ const loginUser = async (userData) => {
 
 // List functions
 
-const createList = async (listData) => {
-    const { name, userId } = listData;
-    return await prisma.list.create({
+const createList = async (Data) => {
+    const list = await prisma.list.create({
         data: {
-            title: name,
-            authorId: userId,
+            title: Data.body.title,
+            authorId: Data.body.userId,
         },
     });
+    return list;
 };
 
 const updateList = async (data) => {
     const { name , id} = data;
     return await prisma.list.update({
         where: {
-            id : id,
+            id : Number(id),
         },
         data: {
             name : name,
@@ -61,18 +60,18 @@ const updateList = async (data) => {
 };
 
 const getList = async (Data) => {
-    const { id } = Data;
     const find = await prisma.list.findMany({
         where: {
-            authorID : id,
+            authorId : Number(Data),
         },
     });
     return find;
 };
 
-const deleteList = async (ListId) => {
+const deleteList = async (id) => {
+    console.log(id);
     return await prisma.list.delete({
-        where: { id: ListId },
+        where: { id: Number(id) },
     });
 };
 
