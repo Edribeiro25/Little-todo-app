@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/register', async (req, res) => {
     try {
         const user = await Service.createUser(req.body);
-        const token = jwt.sign(user, secretKey,  { expiresIn: '1h' });
+        const token = jwt.sign(user, secretKey,  { expiresIn: '3h' });
         res.status(201).json({ token,id : user.id });
     } catch (error) {
         res.status(400).json({ error: error });
@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const user = await Service.loginUser(req.body);
-        const token = jwt.sign(user, secretKey,  { expiresIn: '1h' });
+        const token = jwt.sign(user, secretKey,  { expiresIn: '3h' });
         res.status(201).json({ token,id : user.id });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -71,7 +71,6 @@ router.get('/list1/:id',verifyToken , async (req, res) => {
         const list = await Service.getListid(req.params.id);
         res.status(201).json(list);
     } catch (error) {
-        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -81,7 +80,6 @@ router.delete('/deletelist/:id', async (req, res) => {
         const user = await Service.deleteList(req.params.id);
         res.status(201).json(user);
     } catch (error) {
-        console.log(error);
         res.status(400).json({ error: error });
     }
 });
@@ -91,7 +89,6 @@ router.post('/createTask',verifyToken , async (req, res) => {
         const user = await Service.createTask(req.body.body);
         res.status(201).json(user);
     } catch (error) {
-        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });
@@ -101,12 +98,11 @@ router.get('/task/:id',verifyToken , async (req, res) => {
         const user = await Service.getTask(req.params.id);
         res.status(201).json(user);
     } catch (error) {
-        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });
 
-router.delete('/task:id',verifyToken ,async (req, res) => {
+router.delete('/task/:id',verifyToken ,async (req, res) => {
     try {
         const user = await Service.deleteTask(req.params.id);
         res.status(201).json(user);
@@ -120,7 +116,6 @@ router.patch('/task',verifyToken , async (req, res) => {
         const user = await Service.updateTask(req.body);
         res.status(201).json(user);
     } catch (error) {
-        console.log(error);
         res.status(400).json({ error: error.message });
     }
 });

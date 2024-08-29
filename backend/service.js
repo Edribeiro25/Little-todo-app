@@ -47,18 +47,6 @@ const createList = async (Data) => {
     return list;
 };
 
-const updateList = async (data) => {
-    const { name , id} = data;
-    return await prisma.list.update({
-        where: {
-            id : Number(id),
-        },
-        data: {
-            name : name,
-        },
-    });
-};
-
 const getList = async (Data) => {
     const find = await prisma.list.findMany({
         where: {
@@ -82,7 +70,6 @@ const getListid = async (Data) => {
 
 
 const deleteList = async (id) => {
-    console.log(id);
     return await prisma.list.delete({
         where: { id: Number(id) },
     });
@@ -95,7 +82,7 @@ const createTask = async (Data) => {
     return await prisma.task.create({
     data: {
         title: Data.title,
-        desciption: Data.description,
+        description: Data.description,
         dateLimit : date,
         done : Data.done,
         listId : Data.listId,
@@ -104,7 +91,6 @@ const createTask = async (Data) => {
 };
 
 const getTask = async (Data) => {
-    console.log(Data);
     return await prisma.task.findUniqueOrThrow({
         where: {
             id : Number(Data),
@@ -118,10 +104,7 @@ const updateTask = async (Data) => {
             id : Number(Data.body.id),
     },
     data: {
-        title : Data.body.title,
         done : Data.body.done,
-        desciption : Data.body.description,
-        dateLimit : Data.body.dateLimit,
     },
     });
     return update;
@@ -129,7 +112,7 @@ const updateTask = async (Data) => {
 
 const deleteTask = async (taskId) => {
     return await prisma.task.delete({
-        where: { id: taskId },
+        where: { id: Number(taskId) },
     });
 };
 
@@ -138,7 +121,6 @@ module.exports = {
     createUser,
     loginUser,
     createList,
-    updateList,
     getList,
     deleteList,
     createTask,

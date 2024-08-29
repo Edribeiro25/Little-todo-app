@@ -40,7 +40,7 @@ model Task{
   dateLimit     DateTime 
   done          Boolean  @default(false)
   title         String
-  desciption    String?
+  description   String
   list          List    @relation(fields: [listId], references: [id], onDelete: Cascade)
   listId        Int
 }
