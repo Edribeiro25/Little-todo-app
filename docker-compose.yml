@@ -1,7 +1,7 @@
 services:
   db:
     image: mysql:8.0
-    container_name: mysql_test
+    container_name: mysql
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: test
@@ -36,7 +36,7 @@ services:
       - '3000:3000'
       - '5555:5555'
   vite:
-    container_name: vue
+    container_name: vite
     build:
       context: ./frontend
       dockerfile: Dockerfile
