@@ -1,2 +1,2 @@
-# Test
-Test_tech Google Task
+# To start the projet 
+$ make 
