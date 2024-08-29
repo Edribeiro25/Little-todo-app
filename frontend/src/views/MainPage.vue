@@ -26,7 +26,6 @@
   import Right from '../components/RightVue.vue';
   import VueCookies from 'vue-cookies';
   import router from '../router';
-  import store from '../store';
   import { ref } from 'vue';
 
   const center = ref();
@@ -55,7 +54,6 @@
   }
 
   const logout = () => {
-    store.commit('setUserId',0);
     VueCookies.remove('access_token');
     router.push('/');
   };

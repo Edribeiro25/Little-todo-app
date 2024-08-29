@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '../views/MainPage.vue'
 import LogginView from '../views/LoginPage.vue'
-import store from '../store'
 import axios from 'axios'
 import VueCookies  from 'vue-cookies';
 
