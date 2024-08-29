@@ -5,10 +5,51 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: test
+    restart: always
+    networks:
+      - backend
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  node:
+    container_name: node
+    environment:
+       DATABASE_URL: mysql://root:root_password@db:3306/test
+    build:
+      target: development
+      context: ./backend     
+    restart: always
+    depends_on: 
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/usr/src/app
+    networks:
+      - backend
+    ports:
+      - '3000:3000'
+      - '5555:5555'
+  vite:
+    container_name: vue
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - ./frontend:/usr/src/app/
+    networks:
+      - backend
+    ports:
+      - '5173:5173'
+      
+networks:
+  backend:
 volumes:
   db_data:
+

@@ -21,9 +21,9 @@
   </template>
   
   <script setup>
-  import Left from '@/components/LeftVue.vue';
-  import CenterPage from '@/components/CenterVue.vue';
-  import Right from '@/components/RightVue.vue';
+  import Left from '../components/LeftVue.vue';
+  import CenterPage from '../components/CenterVue.vue';
+  import Right from '../components/RightVue.vue';
   import VueCookies from 'vue-cookies';
   import router from '../router';
   import store from '../store';
