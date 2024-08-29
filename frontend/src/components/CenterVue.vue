@@ -104,6 +104,7 @@ function addTask(){
       }})
     .then(res => {tasks.value.push(res.data);})
     .catch(err => {console.log(err)})
+    showForm.value = false;
 }
 
 function taskDone(task){
